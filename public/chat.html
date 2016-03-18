@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>Simple chat</title>
+<script language="javascript" type="text/javascript">
+
+  var wsUri = "ws://localhost:9000/";
+  var output;
+
+  function init()
+  {
+    output = document.getElementById("output");
+    websocket = new WebSocket(wsUri);
+    websocket.onmessage = function(evt) { onMessage(evt) };
+  }
+
+  function onMessage(evt)
+  {
+    writeToScreen('<span style="color: blue;">' + evt.data+'</span>');
+  }
+
+  function checkEnter(e)
+  {
+     if(e && e.keyCode == 13)
+     {
+        doSend(e.target.value);
+        e.target.value = "";
+     }
+  }
+
+  function doSend(message)
+  {
+    websocket.send(message);
+  }
+
+  function writeToScreen(message)
+  {
+    var pre = document.createElement("p");
+    pre.style.wordWrap = "break-word";
+    pre.innerHTML = message;
+    output.appendChild(pre);
+  }
+
+  window.addEventListener("load", init, false);
+
+  </script>
+
+<h2>Chat</h2>
+
+<div id="wrapper" style="float: left; margin-left: 20px; width: 400px;">
+  <div id="echo-log" style="float: left; padding-left: 20px; width: 350px; border-left: solid 1px #cccccc; margin-bottom: 20px; height: 172px; overflow-y: auto;">
+    <div id="output"></div>
+  </div>
+
+  <input type="text" id="in" value="" autofocus onkeypress="return checkEnter(event)">
+</div>
+
+
+
